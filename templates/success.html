@@ -1,0 +1,87 @@
+```html
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Registration Successful</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 60px;
+        }
+
+        .container {
+            width: 450px;
+            margin: auto;
+            padding: 30px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+        }
+
+        h1 {
+            margin-bottom: 10px;
+        }
+
+        .details {
+            width: 100%;
+            margin-top: 25px;
+            border-collapse: collapse;
+        }
+
+        .details td {
+            padding: 12px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+
+        .details td:first-child {
+            font-weight: bold;
+            width: 35%;
+        }
+
+        .button {
+            display: inline-block;
+            margin-top: 25px;
+            padding: 10px 20px;
+            text-decoration: none;
+            border: 1px solid #333;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>Thank You, {{ name }}!</h1>
+
+        <p>Your registration was successful.</p>
+
+        <table class="details">
+            <tr>
+                <td>Name</td>
+                <td>{{ name }}</td>
+            </tr>
+
+            <tr>
+                <td>Email</td>
+                <td>{{ email }}</td>
+            </tr>
+
+            <tr>
+                <td>Year</td>
+                <td>{{ year }}</td>
+            </tr>
+        </table>
+
+        <a href="/register" class="button">
+            Register Another Student
+        </a>
+
+    </div>
+
+</body>
+</html>
+```
