@@ -1,16 +1,16 @@
-
 pipeline {
     agent any
 
     environment {
         DOCKER_IMAGE = 'shivani0824/week8:latest'
+        KUBE_CONFIG  = 'C:\\ProgramData\\Jenkins\\.jenkins\\.kube\\config'
     }
 
     stages {
+
         stage('Checkout') {
             steps {
-                git branch: 'main',
-                    url: 'https://github.com/Jankar-shivani08/week7-jenkins-docker.git'
+                git url: 'https://github.com/Jankar-shivani08/week7-jenkins-docker.git', branch: 'main'
             }
         }
 
@@ -27,7 +27,7 @@ pipeline {
                     usernameVariable: 'DOCKER_USER',
                     passwordVariable: 'DOCKER_PASS'
                 )]) {
-                    bat 'docker login -u %DOCKER_USER% -p %DOCKER_PASS%'
+                    bat 'echo %DOCKER_PASS% | docker login -u %DOCKER_USER% --password-stdin'
                 }
             }
         }
@@ -38,19 +38,35 @@ pipeline {
             }
         }
 
+        stage('Check Kubernetes') {
+            steps {
+                bat 'kubectl --kubeconfig="%KUBE_CONFIG%" config current-context'
+                bat 'kubectl --kubeconfig="%KUBE_CONFIG%" get nodes'
+            }
+        }
+
         stage('Deploy to Kubernetes') {
             steps {
-                bat 'kubectl apply -f deployment.yaml'
-                bat 'kubectl apply -f service.yaml'
+                bat 'kubectl --kubeconfig="%KUBE_CONFIG%" apply -f deployment.yaml'
+                bat 'kubectl --kubeconfig="%KUBE_CONFIG%" apply -f service.yaml'
             }
         }
 
         stage('Verify Deployment') {
             steps {
-                bat 'kubectl get deployments'
-                bat 'kubectl get pods'
-                bat 'kubectl get services'
+                bat 'kubectl --kubeconfig="%KUBE_CONFIG%" get deployments'
+                bat 'kubectl --kubeconfig="%KUBE_CONFIG%" get pods'
+                bat 'kubectl --kubeconfig="%KUBE_CONFIG%" get services'
             }
+        }
+    }
+
+    post {
+        success {
+            echo 'Week 9 pipeline completed successfully!'
+        }
+        failure {
+            echo 'Pipeline failed. Check the first error in Console Output.'
         }
     }
 }
